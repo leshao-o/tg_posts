@@ -1,0 +1,37 @@
+services:
+  tg_posts_back_service:
+    container_name: 'tg_posts_back'
+    image: 'tg_posts_image'
+    build: 
+      context: . 
+    ports:
+      - "8000:8000"
+    depends_on:
+      - tg_posts_db_service
+    networks:
+      - tg_posts_network
+    env_file:
+      - .env
+
+  tg_posts_db_service:
+    container_name: 'tg_posts_db'
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-tg_posts-data:/var/tg_posts/postgresql/data
+    networks:
+      - tg_posts_network
+
+
+volumes:
+  pg-tg_posts-data:
+
+
+networks:
+  tg_posts_network:
