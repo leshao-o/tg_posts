@@ -1,8 +1,4 @@
 import logging
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
-
 from telegram import Update 
 from telegram.ext import ContextTypes
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
@@ -10,6 +6,9 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from src.services.post import PostService
 from src.database import async_session_maker
 from src.utils.db_manager import DBManager
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 async def start(update: Update, context: ContextTypes):
@@ -22,7 +21,7 @@ async def unknown(update: Update, context: ContextTypes):
     await context.bot.send_message(chat_id=update.effective_chat.id, text="Я не знаю такой команды.")
     
 
-def build_posts_keyboard(posts_titles):
+def build_posts_keyboard(posts_titles: list[str]):
     buttons = [
         [InlineKeyboardButton(text=title, callback_data=f"post_{index}")]
         for index, title in enumerate(posts_titles)
